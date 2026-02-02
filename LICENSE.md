@@ -1,7 +1,20 @@
-Copyright 2026 Nattapat2871
+𝖢𝗈𝗉𝗒𝗋𝗂𝗀𝗁𝗍 2026 (C) Nattapat2871
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+𝖯𝖾𝗋𝗆𝗂𝗌𝗌𝗂𝗈𝗇 𝗂𝗌 𝗁𝖾𝗋𝖾𝖻𝗒 𝗀𝗋𝖺𝗇𝗍𝖾𝖽, 𝖿𝗋𝖾𝖾 𝗈𝖿 𝖼𝗁𝖺𝗋𝗀𝖾, 𝗍𝗈 𝖺𝗇𝗒 𝗉𝖾𝗋𝗌𝗈𝗇 𝗈𝖻𝗍𝖺𝗂𝗇𝗂𝗇𝗀 𝖺 𝖼𝗈𝗉𝗒 𝗈𝖿 𝗍𝗁𝗂𝗌 𝗌𝗈𝖿𝗍𝗐𝖺𝗋𝖾 𝖺𝗇𝖽 𝖺𝗌𝗌𝗈𝖼𝗂𝖺𝗍𝖾𝖽 𝖽𝗈𝖼𝗎𝗆𝖾𝗇𝗍𝖺𝗍𝗂𝗈𝗇 𝖿𝗂𝗅𝖾𝗌 (𝗍𝗁𝖾 “𝖲𝗈𝖿𝗍𝗐𝖺𝗋𝖾”), 𝗍𝗈 𝖽𝖾𝖺𝗅 𝗂𝗇 𝗍𝗁𝖾 𝖲𝗈𝖿𝗍𝗐𝖺𝗋𝖾 𝗐𝗂𝗍𝗁𝗈𝗎𝗍 𝗋𝖾𝗌𝗍𝗋𝗂𝖼𝗍𝗂𝗈𝗇, 𝗂𝗇𝖼𝗅𝗎𝖽𝗂𝗇𝗀 𝗐𝗂𝗍𝗁𝗈𝗎𝗍 𝗅𝗂𝗆𝗂𝗍𝖺𝗍𝗂𝗈𝗇 𝗍𝗁𝖾 𝗋𝗂𝗀𝗁𝗍𝗌 𝗍𝗈 𝗎𝗌𝖾, 𝖼𝗈𝗉𝗒, 𝗆𝗈𝖽𝗂𝖿𝗒, 𝗆𝖾𝗋𝗀𝖾, 𝗉𝗎𝖻𝗅𝗂𝗌𝗁, 𝖽𝗂𝗌𝗍𝗋𝗂𝖻𝗎𝗍𝖾, 𝗌𝗎𝖻𝗅𝗂𝖼𝖾𝗇𝗌𝖾, 𝖺𝗇𝖽/𝗈𝗋 𝗌𝖾𝗅𝗅 𝖼𝗈𝗉𝗂𝖾𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖲𝗈𝖿𝗍𝗐𝖺𝗋𝖾, 𝖺𝗇𝖽 𝗍𝗈 𝗉𝖾𝗋𝗆𝗂𝗍 𝗉𝖾𝗋𝗌𝗈𝗇𝗌 𝗍𝗈 𝗐𝗁𝗈𝗆 𝗍𝗁𝖾 𝖲𝗈𝖿𝗍𝗐𝖺𝗋𝖾 𝗂𝗌 𝖿𝗎𝗋𝗇𝗂𝗌𝗁𝖾𝖽 𝗍𝗈 𝖽𝗈 𝗌𝗈, 𝗌𝗎𝖻𝗃𝖾𝖼𝗍 𝗍𝗈 𝗍𝗁𝖾 𝖿𝗈𝗅𝗅𝗈𝗐𝗂𝗇𝗀 𝖼𝗈𝗇𝖽𝗂𝗍𝗂𝗈𝗇𝗌:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+𝖳𝗁𝖾 𝖺𝖻𝗈𝗏𝖾 𝖼𝗈𝗉𝗒𝗋𝗂𝗀𝗁𝗍 𝗇𝗈𝗍𝗂𝖼𝖾 𝖺𝗇𝖽 𝗍𝗁𝗂𝗌 𝗉𝖾𝗋𝗆𝗂𝗌𝗌𝗂𝗈𝗇 𝗇𝗈𝗍𝗂𝖼𝖾 𝗌𝗁𝖺𝗅𝗅 𝖻𝖾 𝗂𝗇𝖼𝗅𝗎𝖽𝖾𝖽 𝗂𝗇 𝖺𝗅𝗅 𝖼𝗈𝗉𝗂𝖾𝗌 𝗈𝗋 𝗌𝗎𝖻𝗌𝗍𝖺𝗇𝗍𝗂𝖺𝗅 𝗉𝗈𝗋𝗍𝗂𝗈𝗇𝗌 𝗈𝖿 𝗍𝗁𝖾 𝖲𝗈𝖿𝗍𝗐𝖺𝗋𝖾.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+𝖳𝖧𝖤 𝖲𝖮𝖥𝖳𝖶𝖠𝖱𝖤 𝖨𝖲 𝖯𝖱𝖮𝖵𝖨𝖣𝖤𝖣 “𝖠𝖲 𝖨𝖲”, 𝖶𝖨𝖳𝖧𝖮𝖴𝖳 𝖶𝖠𝖱𝖱𝖠𝖭𝖳𝖸 𝖮𝖥 𝖠𝖭𝖸 𝖪𝖨𝖭𝖣, 𝖤𝖷𝖯𝖱𝖤𝖲𝖲 𝖮𝖱 𝖨𝖬𝖯𝖫𝖨𝖤𝖣, 𝖨𝖭𝖢𝖫𝖴𝖣𝖨𝖭𝖦 𝖡𝖴𝖳 𝖭𝖮𝖳 𝖫𝖨𝖬𝖨𝖳𝖤𝖣 𝖳𝖮 𝖳𝖧𝖤 𝖶𝖠𝖱𝖱𝖠𝖭𝖳𝖨𝖤𝖲 𝖮𝖥 𝖬𝖤𝖱𝖢𝖧𝖠𝖭𝖳𝖠𝖡𝖨𝖫𝖨𝖳𝖸, 𝖥𝖨𝖳𝖭𝖤𝖲𝖲 𝖥𝖮𝖱 𝖠 𝖯𝖠𝖱𝖳𝖨𝖢𝖴𝖫𝖠𝖱 𝖯𝖴𝖱𝖯𝖮𝖲𝖤 𝖠𝖭𝖣 𝖭𝖮𝖭𝖨𝖭𝖥𝖱𝖨𝖭𝖦𝖤𝖬𝖤𝖭𝖳. 𝖨𝖭 𝖭𝖮 𝖤𝖵𝖤𝖭𝖳 𝖲𝖧𝖠𝖫𝖫 𝖳𝖧𝖤 𝖠𝖴𝖳𝖧𝖮𝖱𝖲 𝖮𝖱 𝖢𝖮𝖯𝖸𝖱𝖨𝖦𝖧𝖳 𝖧𝖮𝖫𝖣𝖤𝖱𝖲 𝖡𝖤 𝖫𝖨𝖠𝖡𝖫𝖤 𝖥𝖮𝖱 𝖠𝖭𝖸 𝖢𝖫𝖠𝖨𝖬, 𝖣𝖠𝖬𝖠𝖦𝖤𝖲 𝖮𝖱 𝖮𝖳𝖧𝖤𝖱 𝖫𝖨𝖠𝖡𝖨𝖫𝖨𝖳𝖸, 𝖶𝖧𝖤𝖳𝖧𝖤𝖱 𝖨𝖭 𝖠𝖭 𝖠𝖢𝖳𝖨𝖮𝖭 𝖮𝖥 𝖢𝖮𝖭𝖳𝖱𝖠𝖢𝖳, 𝖳𝖮𝖱𝖳 𝖮𝖱 𝖮𝖳𝖧𝖤𝖱𝖶𝖨𝖲𝖤, 𝖠𝖱𝖨𝖲𝖨𝖭𝖦 𝖥𝖱𝖮𝖬, 𝖮𝖴𝖳 𝖮𝖥 𝖮𝖱 𝖨𝖭 𝖢𝖮𝖭𝖭𝖤𝖢𝖳𝖨𝖮𝖭 𝖶𝖨𝖳𝖧 𝖳𝖧𝖤 𝖲𝖮𝖥𝖳𝖶𝖠𝖱𝖤 𝖮𝖱 𝖳𝖧𝖤 𝖴𝖲𝖤 𝖮𝖱 𝖮𝖳𝖧𝖤𝖱 𝖣𝖤𝖠𝖫𝖨𝖭𝖦𝖲 𝖨𝖭 𝖳𝖧𝖤 𝖲𝖮𝖥𝖳𝖶𝖠𝖱𝖤.
+
+</br></br></br></br></br>
+
+ลิขสิทธิ์ © 2026 โดย Nattapat2871
+
+อนุญาตให้ทุกคนสามารถใช้งานซอฟต์แวร์และเอกสารที่เกี่ยวข้อง ("ซอฟต์แวร์") ได้ฟรี โดยสามารถทำอะไรก็ได้กับซอฟต์แวร์นี้ เช่น ใช้ คัดลอก ดัดแปลง รวมเข้ากับงานอื่น เผยแพร่ แจกจ่าย ขาย หรือให้สิทธิ์ผู้อื่นใช้งานได้ โดยไม่มีข้อจำกัด 
+
+**ภายใต้เงื่อนไขว่า**
+* ต้องใส่ข้อความลิขสิทธิ์และข้อความอนุญาตนี้ไว้ในทุกสำเนาหรือในส่วนสำคัญของซอฟต์แวร์ที่แจกจ่ายออกไป
+
+หมายเหตุสำคัญ:
+ซอฟต์แวร์นี้ถูกแจกจ่ายในสภาพ "ตามสภาพ" ("AS IS") โดยไม่มีการรับประกันใด ๆ ทั้งสิ้น ไม่ว่าจะเป็นการรับประกันแบบชัดแจ้งหรือโดยนัย เช่น ความเหมาะสมสำหรับการใช้งานเฉพาะทาง หรือการไม่ละเมิดสิทธิ์ใด ๆ
+ผู้เขียนหรือเจ้าของลิขสิทธิ์จะไม่รับผิดชอบต่อความเสียหาย หรือปัญหาใด ๆ ที่เกิดขึ้นจากการใช้ซอฟต์แวร์นี้ ไม่ว่าจะเป็นการฟ้องร้องตามสัญญา การละเมิด หรือสาเหตุอื่น ๆ
