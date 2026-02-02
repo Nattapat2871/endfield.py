@@ -77,11 +77,11 @@ python endfield_checkin.py
 (.venv) PS E:\devlopers_app\Skript\Project Focalor\tests> python endfield_checkin.py
 ⌨️ Github: [https://github.com/Nattapat2871/endfield.py](https://github.com/Nattapat2871/endfield.py)
 🚀 Starting Arknights: Endfield Check-in System
-👤 Target Role ID: 3_4492964822_2
+👤 Target Role ID: 3_449******2_2
 ----------------------------------------
 🔍 1. Fetching user profile...
    👤 Nickname: Nattapat2871
-   🆔 User ID: 7305348574810
+   🆔 User ID: 730********10
    🖼️ Avatar URL: [https://static.skport.com/image/common/20251031/46750c47729f845b4db6c404e12f771c.png](https://static.skport.com/image/common/20251031/46750c47729f845b4db6c404e12f771c.png)
 ----------------------------------------
 🔄 2. Sending check-in request...
