@@ -3,7 +3,7 @@
 
 # Project: Arknights: Endfield Auto Check-in Script
 # Author: nattapat2871
-# Github: https://github.com/Nattapat2871/endfield.py
+# Github: https://github.com/Nattapat2871/endfield-sign
 # License: MIT License
 
 # DISCLAIMER:
