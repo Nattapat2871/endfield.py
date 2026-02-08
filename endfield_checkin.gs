@@ -1,6 +1,6 @@
 
 // ========================================================================================
-// Project: Arknights: Endfield Auto Check-in Script (v1.3 - Auto Detect )
+// Project: Arknights: Endfield Auto Check-in Script (v1.4 - Auto Detect Server & Real UID)
 // Author: nattapat2871
 // Github: https://github.com/Nattapat2871/endfield-sign/endfield_checkin.gs
 // ========================================================================================
@@ -67,7 +67,7 @@ function runFullProcess() {
       // 1. Authenticate (เข้าสู่ระบบ)
       const authData = step1_Authenticate(account);
       
-      // 1.5 Auto-Detect Roles (หาตัวละครทั้งหมดเอง)
+      // 1.5 Auto-Detect Roles (หาตัวละครทั้งหมดเอง และเก็บ Server/Real UID มาด้วย)
       const targetRoles = step1_5_FetchGameRoles(authData);
       
       Logger.log(`   🔍 Found ${targetRoles.length} role(s) for this account.`);
@@ -77,14 +77,24 @@ function runFullProcess() {
         continue;
       }
 
-      // Loop 2: วนลูปทีละตัวละคร (รองรับ Asia + USA + others)
+      // Loop 2: วนลูปทีละตัวละคร
       for (let j = 0; j < targetRoles.length; j++) {
-        const currentRoleId = targetRoles[j]; // Format: "3_UID_Server"
+        // แก้ไข: รับเป็น Object แทน String เพื่อดึงข้อมูล Server และ Real UID มาใช้
+        const roleData = targetRoles[j]; 
+        const currentRoleId = roleData.fullId; // Format: "3_UID_Server" (ใช้สำหรับ Request)
+        const realUid = roleData.realUid;      // Format: "UID" (ใช้สำหรับโชว์)
+        const serverName = roleData.serverName;// Format: "Asia", etc.
         
         try {
-          // 2. Get Profile (ดึงข้อมูลตัวละครเพื่อความสวยงามใน Log/Discord)
+          // 2. Get Profile (ดึงข้อมูลตัวละคร)
           const profile = step2_GetUserProfile(authData, currentRoleId);
-          Logger.log(`   🎮 Checking for: ${profile.username} (UID: ${profile.uid})`);
+          
+          // อัปเดต Profile ให้ใช้ Real UID และเพิ่ม Server Name ลงไปใน Object (เผื่อส่ง Discord)
+          profile.uid = realUid; 
+          profile.serverName = serverName;
+
+          // ✅ แสดงผล Log ตามรูปแบบที่ต้องการ
+          Logger.log(`   🎮 Checking for: ${profile.username} (UID: ${realUid}) (Server : ${serverName})`);
 
           // 3. Check-in (เช็คชื่อและรับของ)
           const result = step3_ProcessCheckIn(authData, currentRoleId);
@@ -95,8 +105,8 @@ function runFullProcess() {
           step4_SendDiscord(account, profile, result);
 
         } catch (innerErr) {
-          Logger.log(`      ❌ Error on Role ${currentRoleId}: ${innerErr.message}`);
-           step4_SendDiscord(account, { username: "Unknown Role", uid: currentRoleId, avatarUrl: "" }, { 
+          Logger.log(`      ❌ Error on Role ${realUid}: ${innerErr.message}`);
+           step4_SendDiscord(account, { username: "Unknown Role", uid: realUid, serverName: serverName, avatarUrl: "" }, { 
             success: false, 
             message: innerErr.message, 
             rewardName: "Error", 
@@ -111,7 +121,7 @@ function runFullProcess() {
     } catch (e) {
       Logger.log(`❌ Critical Error for Account ${account.name}: ${e.message}`);
       // ส่งแจ้งเตือน Error ระดับ Account (เช่น Token ตาย)
-      step4_SendDiscord(account, { username: "System", uid: "Auth Failed", avatarUrl: "" }, { 
+      step4_SendDiscord(account, { username: "System", uid: "Auth Failed", serverName: "Unknown", avatarUrl: "" }, { 
         success: false, 
         message: e.message, 
         rewardName: "Error", 
@@ -138,7 +148,7 @@ function step1_Authenticate(account) {
   }
 }
 
-// ขั้นตอนที่ 1.5: ค้นหา Role ID ทั้งหมด (Auto-Detect)
+// ขั้นตอนที่ 1.5: ค้นหา Role ID ทั้งหมด (Auto-Detect) [แก้ไขใหม่ ดึง ServerName]
 function step1_5_FetchGameRoles(authData) {
   const ts = getTimestamp();
   const path = "/api/v1/game/player/binding";
@@ -148,7 +158,8 @@ function step1_5_FetchGameRoles(authData) {
     const res = UrlFetchApp.fetch(BASE_URL + path, { method: "get", headers: headers, muteHttpExceptions: true });
     const json = JSON.parse(res.getContentText());
 
-    const foundRoles = [];
+    const foundRoles = []; // จะเก็บ Object แทน String
+    
     if (json.code === 0 && json.data && json.data.list) {
       const appList = json.data.list;
       // วนหา appCode = endfield
@@ -156,21 +167,31 @@ function step1_5_FetchGameRoles(authData) {
         if (app.appCode === "endfield" && app.bindingList) {
           // วนทุก Binding
           for (let binding of app.bindingList) {
-             // สูตรการสร้าง Role String คือ: "3_UID_ServerID" (3 คือ Game ID ของ Endfield)
              
+             // ฟังก์ชันช่วยเช็คซ้ำ
+             const pushRole = (r) => {
+                const fullId = `3_${r.roleId}_${r.serverId}`;
+                // เช็คว่ามี role นี้ใน list หรือยัง
+                const isExist = foundRoles.some(item => item.fullId === fullId);
+                
+                if (!isExist) {
+                  foundRoles.push({
+                    fullId: fullId,            // ใช้สำหรับส่ง API
+                    realUid: r.roleId,         // UID เพียวๆ
+                    serverName: r.serverName || "Unknown"  // ชื่อ Server (Asia, Americas...)
+                  });
+                }
+             };
+
              // 1. เช็ค defaultRole
              if (binding.defaultRole) {
-                const r = binding.defaultRole;
-                foundRoles.push(`3_${r.roleId}_${r.serverId}`);
+               pushRole(binding.defaultRole);
              }
              
              // 2. เช็ค roles อื่นๆ
              if (binding.roles && binding.roles.length > 0) {
                for (let r of binding.roles) {
-                 const fullId = `3_${r.roleId}_${r.serverId}`;
-                 if (!foundRoles.includes(fullId)) {
-                   foundRoles.push(fullId);
-                 }
+                 pushRole(r);
                }
              }
           }
@@ -198,7 +219,7 @@ function step2_GetUserProfile(authData, roleId) {
       const basicUser = json.data.user.basicUser;
       return {
         username: basicUser.nickname || "Unknown",
-        uid: basicUser.id || roleId,
+        uid: roleId, // ค่านี้จะถูก overwrite ใน loop หลักด้วย realUid
         avatarUrl: basicUser.avatar || ""
       };
     }
@@ -279,15 +300,16 @@ function step3_ProcessCheckIn(authData, roleId) {
   };
 }
 
-// ขั้นตอนที่ 4: ส่ง Discord
+// ขั้นตอนที่ 4: ส่ง Discord (เพิ่มการโชว์ Server)
 function step4_SendDiscord(account, profile, result, isError = false) {
   if (!DISCORD_WEBHOOK_URL || !DISCORD_WEBHOOK_URL.startsWith("http")) return;
 
   const color = isError ? 16711680 : (result.success ? 3066993 : 15548997); 
-  
+  const serverText = profile.serverName ? ` (${profile.serverName})` : "";
+
   const fields = [];
   if (!isError) {
-    fields.push({ "name": "👤 Username", "value": `${profile.username} (UID: ${profile.uid})`, "inline": false });
+    fields.push({ "name": "👤 User Info", "value": `${profile.username}\nUID: ${profile.uid}${serverText}`, "inline": false });
     fields.push({ "name": "📅 Progress", "value": `${result.claimedCount} / ${result.totalDays} days`, "inline": true });
     fields.push({ "name": "🎁 Reward", "value": `${result.rewardName} x${result.rewardCount}`, "inline": true });
   } else {
@@ -305,7 +327,7 @@ function step4_SendDiscord(account, profile, result, isError = false) {
       "fields": fields,
       "thumbnail": { "url": result.rewardIcon || "" },
       "timestamp": new Date().toISOString(),
-      "footer": { "text": "Skport Auto Check-in" }
+      "footer": { "text": `Skport Auto Check-in | ${serverText.replace(/[()]/g,'').trim()}` }
     }]
   };
 
