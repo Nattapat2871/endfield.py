@@ -1,8 +1,10 @@
+
 // ========================================================================================
-// Project: Arknights: Endfield Auto Check-in Script (Refactored v1.1)
+// Project: Arknights: Endfield Auto Check-in Script (v1.3 - Auto Detect )
 // Author: nattapat2871
-// Github: https://github.com/Nattapat2871/endfield-sign
+// Github: https://github.com/Nattapat2871/endfield-sign/endfield_checkin.gs
 // ========================================================================================
+
 
 // =========================================================
 // 👇 ACCOUNT SETTINGS
@@ -10,23 +12,19 @@
 const ACCOUNT_LIST = [
   {
     "name": "Main Account",
-    "token": "",  // Enter your ACCOUNT_TOKEN here
-    "roleId": "" // Enter your SK_GAME_ROLE here
+    "token": ""  // enter your ACCOUNT_TOKEN here
   },
-
-   // Add more accounts here if needed
-   // { 
-     // "name": "Sub Account",         
-     // "token": "",  
-     // "roleId": "" 
-   // }
+  // add more account
+  // {
+  //   "name": "Sub Account",
+  //   "token": "..."
+  // }
 ];
 
-// If you don't want to use Discord, you can leave it as "YOUR_DISCORD_WEBHOOK_URL_HERE" or "".
 const DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"; 
+
 // =========================================================
 
-//     ---- This is all that needs to be fixed. ----
 
 
 
@@ -39,19 +37,15 @@ const DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE";
 
 
 
-
-
-
-
-
-/**  this script made by Nattapat2871    **/
-/**  After this line is the script code. Please DO NOT modify. **/
-/**  This script is .gs and works only in Google app script.  (https://script.google.com)  */
+/** this script made by Nattapat2871    **/
+/** After this line is the script code. Please DO NOT modify. **/
+/** This script is .gs and works only in Google app script.  (https://script.google.com)  */
 
 
 const APP_CODE = "6eb76d4e13aa36e6";
 const BASE_URL = "https://zonai.skport.com";
 const USER_AGENT = "Skport/0.7.0 (com.gryphline.skport; build:700089; Android 33; ) Okhttp/5.1.0";
+
 
 // =========================================================
 // 🚀 MAIN FUNCTION (ผู้สั่งงานหลัก)
@@ -64,30 +58,60 @@ function runFullProcess() {
 
   Logger.log(`🚀 Starting check-in for ${ACCOUNT_LIST.length} accounts...`);
 
-  // วนลูปทำทีละไอดี
+  // Loop 1: วนลูปทีละ Account (Token)
   for (let i = 0; i < ACCOUNT_LIST.length; i++) {
     const account = ACCOUNT_LIST[i];
-    Logger.log(`\n--- Processing Account: ${account.name} ---`);
+    Logger.log(`\n--- 🔑 Processing Account: ${account.name} ---`);
 
     try {
       // 1. Authenticate (เข้าสู่ระบบ)
       const authData = step1_Authenticate(account);
       
-      // 2. Get Profile (ดึงข้อมูลตัวละคร)
-      const profile = step2_GetUserProfile(authData, account.roleId);
-
-      // 3. Check-in (เช็คชื่อและรับของ)
-      const result = step3_ProcessCheckIn(authData, account.roleId);
+      // 1.5 Auto-Detect Roles (หาตัวละครทั้งหมดเอง)
+      const targetRoles = step1_5_FetchGameRoles(authData);
       
-      Logger.log(`Result: ${result.message} | Reward: ${result.rewardName} x${result.rewardCount}`);
+      Logger.log(`   🔍 Found ${targetRoles.length} role(s) for this account.`);
 
-      // 4. Notify Discord (ส่งแจ้งเตือน)
-      step4_SendDiscord(account, profile, result);
+      if (targetRoles.length === 0) {
+        Logger.log("   ⚠️ No game roles found (Check if you have created a character). Skipping...");
+        continue;
+      }
+
+      // Loop 2: วนลูปทีละตัวละคร (รองรับ Asia + USA + others)
+      for (let j = 0; j < targetRoles.length; j++) {
+        const currentRoleId = targetRoles[j]; // Format: "3_UID_Server"
+        
+        try {
+          // 2. Get Profile (ดึงข้อมูลตัวละครเพื่อความสวยงามใน Log/Discord)
+          const profile = step2_GetUserProfile(authData, currentRoleId);
+          Logger.log(`   🎮 Checking for: ${profile.username} (UID: ${profile.uid})`);
+
+          // 3. Check-in (เช็คชื่อและรับของ)
+          const result = step3_ProcessCheckIn(authData, currentRoleId);
+          
+          Logger.log(`      ✅ Result: ${result.message} | Reward: ${result.rewardName} x${result.rewardCount}`);
+
+          // 4. Notify Discord (ส่งแจ้งเตือน)
+          step4_SendDiscord(account, profile, result);
+
+        } catch (innerErr) {
+          Logger.log(`      ❌ Error on Role ${currentRoleId}: ${innerErr.message}`);
+           step4_SendDiscord(account, { username: "Unknown Role", uid: currentRoleId, avatarUrl: "" }, { 
+            success: false, 
+            message: innerErr.message, 
+            rewardName: "Error", 
+            rewardCount: 0 
+          }, true);
+        }
+
+        // หน่วงเวลา 1 วินาทีระหว่างตัวละครในไอดีเดียวกัน
+        if (j < targetRoles.length - 1) Utilities.sleep(1000);
+      }
 
     } catch (e) {
-      Logger.log(`❌ Critical Error for ${account.name}: ${e.message}`);
-      // ส่งแจ้งเตือน Error เข้า Discord แบบย่อ
-      step4_SendDiscord(account, { username: "Unknown", uid: "Error", avatarUrl: "" }, { 
+      Logger.log(`❌ Critical Error for Account ${account.name}: ${e.message}`);
+      // ส่งแจ้งเตือน Error ระดับ Account (เช่น Token ตาย)
+      step4_SendDiscord(account, { username: "System", uid: "Auth Failed", avatarUrl: "" }, { 
         success: false, 
         message: e.message, 
         rewardName: "Error", 
@@ -95,7 +119,7 @@ function runFullProcess() {
       }, true);
     }
 
-    // หน่วงเวลา 2 วินาทีก่อนทำไอดีถัดไป
+    // หน่วงเวลา 2 วินาทีก่อนทำ Account ถัดไป
     if (i < ACCOUNT_LIST.length - 1) Utilities.sleep(2000);
   }
 }
@@ -107,14 +131,60 @@ function runFullProcess() {
 // ขั้นตอนที่ 1: จัดการเรื่อง Token และ Credential
 function step1_Authenticate(account) {
   try {
-    const authData = performOauthFlow(account.token); // เรียกใช้ Helper ด้านล่าง
-    return authData; // ส่งคืน { cred, salt }
+    const authData = performOauthFlow(account.token); 
+    return authData; // { cred, salt }
   } catch (e) {
-    throw new Error("Authentication Failed: " + e.message);
+    throw new Error("Authentication Failed (Check Token): " + e.message);
   }
 }
 
-// ขั้นตอนที่ 2: ดึงข้อมูลโปรไฟล์ (ชื่อในเกม, UID, รูป)
+// ขั้นตอนที่ 1.5: ค้นหา Role ID ทั้งหมด (Auto-Detect)
+function step1_5_FetchGameRoles(authData) {
+  const ts = getTimestamp();
+  const path = "/api/v1/game/player/binding";
+  const headers = getHeaders(path, ts, authData.cred, authData.salt, "");
+
+  try {
+    const res = UrlFetchApp.fetch(BASE_URL + path, { method: "get", headers: headers, muteHttpExceptions: true });
+    const json = JSON.parse(res.getContentText());
+
+    const foundRoles = [];
+    if (json.code === 0 && json.data && json.data.list) {
+      const appList = json.data.list;
+      // วนหา appCode = endfield
+      for (let app of appList) {
+        if (app.appCode === "endfield" && app.bindingList) {
+          // วนทุก Binding
+          for (let binding of app.bindingList) {
+             // สูตรการสร้าง Role String คือ: "3_UID_ServerID" (3 คือ Game ID ของ Endfield)
+             
+             // 1. เช็ค defaultRole
+             if (binding.defaultRole) {
+                const r = binding.defaultRole;
+                foundRoles.push(`3_${r.roleId}_${r.serverId}`);
+             }
+             
+             // 2. เช็ค roles อื่นๆ
+             if (binding.roles && binding.roles.length > 0) {
+               for (let r of binding.roles) {
+                 const fullId = `3_${r.roleId}_${r.serverId}`;
+                 if (!foundRoles.includes(fullId)) {
+                   foundRoles.push(fullId);
+                 }
+               }
+             }
+          }
+        }
+      }
+    }
+    return foundRoles; 
+  } catch (e) {
+    Logger.log("⚠️ Warning: Failed to fetch game roles auto-binding. " + e.message);
+    return [];
+  }
+}
+
+// ขั้นตอนที่ 2: ดึงข้อมูลโปรไฟล์
 function step2_GetUserProfile(authData, roleId) {
   const ts = getTimestamp();
   const path = "/web/v2/user";
@@ -128,15 +198,15 @@ function step2_GetUserProfile(authData, roleId) {
       const basicUser = json.data.user.basicUser;
       return {
         username: basicUser.nickname || "Unknown",
-        uid: basicUser.id || "Unknown",
+        uid: basicUser.id || roleId,
         avatarUrl: basicUser.avatar || ""
       };
     }
   } catch (e) {
-    Logger.log("⚠️ Warning: Could not fetch profile. Using defaults.");
+    Logger.log("⚠️ Warning: Could not fetch profile.");
   }
   
-  return { username: "Unknown User", uid: "Unknown", avatarUrl: "" };
+  return { username: "Unknown User", uid: roleId, avatarUrl: "" };
 }
 
 // ขั้นตอนที่ 3: เช็คชื่อประจำวัน
@@ -152,7 +222,7 @@ function step3_ProcessCheckIn(authData, roleId) {
   const statusData = JSON.parse(statusRes.getContentText());
 
   if (statusData.code !== 0) {
-    throw new Error("Failed to fetch calendar: " + statusData.message);
+    throw new Error("Calendar Fetch Failed: " + (statusData.message || statusData.code));
   }
 
   const data = statusData.data || {};
@@ -171,8 +241,8 @@ function step3_ProcessCheckIn(authData, roleId) {
     rewardIdx = claimedCount > 0 ? claimedCount - 1 : 0;
   } else {
     // ต้องกดรับ (POST)
-    ts = getTimestamp(); // อัพเดทเวลาใหม่
-    headers = getHeaders(path, ts, authData.cred, authData.salt, roleId); // sign ใหม่
+    ts = getTimestamp(); 
+    headers = getHeaders(path, ts, authData.cred, authData.salt, roleId); 
     
     const postRes = UrlFetchApp.fetch(url, { method: "post", headers: headers, muteHttpExceptions: true });
     const postData = JSON.parse(postRes.getContentText());
@@ -180,7 +250,7 @@ function step3_ProcessCheckIn(authData, roleId) {
     if (postData.code === 0) {
       message = "🎉 Success! Reward claimed.";
       isSuccess = true;
-      rewardIdx = claimedCount; // รางวัลของวันนี้คือช่องถัดไป
+      rewardIdx = claimedCount; 
       claimedCount++;
     } else {
       message = "❌ Claim Failed: " + postData.message;
@@ -209,11 +279,11 @@ function step3_ProcessCheckIn(authData, roleId) {
   };
 }
 
-// ขั้นตอนที่ 4: ส่ง Discord (แยกออกมาให้ดูง่าย)
+// ขั้นตอนที่ 4: ส่ง Discord
 function step4_SendDiscord(account, profile, result, isError = false) {
   if (!DISCORD_WEBHOOK_URL || !DISCORD_WEBHOOK_URL.startsWith("http")) return;
 
-  const color = isError ? 16711680 : (result.success ? 3066993 : 15548997); // Red, Green, or Orange
+  const color = isError ? 16711680 : (result.success ? 3066993 : 15548997); 
   
   const fields = [];
   if (!isError) {
@@ -235,7 +305,7 @@ function step4_SendDiscord(account, profile, result, isError = false) {
       "fields": fields,
       "thumbnail": { "url": result.rewardIcon || "" },
       "timestamp": new Date().toISOString(),
-      "footer": { "text": "Skport Auto Check-in (Refactored)" }
+      "footer": { "text": "Skport Auto Check-in" }
     }]
   };
 
@@ -291,9 +361,8 @@ function performOauthFlow(accountToken) {
 
 function getHeaders(path, timestamp, cred, salt, roleId) {
   const sign = generateSign(path, timestamp, salt);
-  return {
+  const headers = {
     "cred": cred,
-    "sk-game-role": roleId,
     "platform": "3",
     "sk-language": "en",
     "timestamp": timestamp,
@@ -302,6 +371,12 @@ function getHeaders(path, timestamp, cred, salt, roleId) {
     "User-Agent": USER_AGENT,
     "content-type": "application/json"
   };
+  
+  if (roleId && roleId !== "") {
+    headers["sk-game-role"] = roleId;
+  }
+  
+  return headers;
 }
 
 function generateSign(path, timestamp, salt) {
