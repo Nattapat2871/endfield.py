@@ -105,9 +105,8 @@ This is the recommended method. It runs automatically on Google's servers withou
 4. Click **Save**. Done! The script will now check-in for you every day.
 
 ### 📸 Discord Output Example
-<p align="center">
-  <img width="458" height="530" alt="image" src="https://github.com/user-attachments/assets/98eb7619-79e8-4c12-9c27-5f454eb74081" />
-</p>
+<img width="551" height="608" alt="image" src="https://github.com/user-attachments/assets/8f430d04-f449-4ad3-8e5e-3595e4223319" />
+
 
 ```text
 Arknights: Endfield Check-in
